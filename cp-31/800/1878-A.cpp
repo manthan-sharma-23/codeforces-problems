@@ -1,7 +1,5 @@
-#include <algorithm>
 #include <iostream>
-#include <utility>
-#include <vector>
+#include <map>
 
 using namespace std;
 
@@ -13,23 +11,25 @@ void fastIO() {
 }
 
 void solve() {
-  int n;
-  cin >> n;
 
-  vector<int> a(n);
+  int n, k;
+  cin >> n >> k;
+  map<int, int> mp;
+  for (int i = 1; i <= n; i++) {
+    int t;
+    cin >> t;
+    mp[t]++;
+  }
 
-  for (int i = 0; i < n; i++)
-    cin >> a[i];
-
-  if (*min_element(a.begin(), a.end()) == a[0]) {
-    cout << "YES" << endl;
-  } else {
+  if (mp[k] <= 0) {
     cout << "NO" << endl;
+  } else {
+    cout << "YES" << endl;
   }
 }
 
 int main() {
-
+  fastIO();
   int t;
   cin >> t;
 

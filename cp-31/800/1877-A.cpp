@@ -1,6 +1,6 @@
 #include <algorithm>
 #include <iostream>
-#include <utility>
+#include <numeric>
 #include <vector>
 
 using namespace std;
@@ -16,20 +16,16 @@ void solve() {
   int n;
   cin >> n;
 
-  vector<int> a(n);
+  vector<int> a(n - 1);
 
-  for (int i = 0; i < n; i++)
+  for (int i = 0; i < n - 1; i++)
     cin >> a[i];
 
-  if (*min_element(a.begin(), a.end()) == a[0]) {
-    cout << "YES" << endl;
-  } else {
-    cout << "NO" << endl;
-  }
+  cout << -1 * accumulate(a.begin(), a.end(), 0) << endl;
 }
 
 int main() {
-
+  fastIO();
   int t;
   cin >> t;
 
