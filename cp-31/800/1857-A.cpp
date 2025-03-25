@@ -1,5 +1,5 @@
-#include <cmath>
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -13,11 +13,24 @@ void fastIO() {
 void solve() {
   int n;
   cin >> n;
-  int d = log10(n);
-  int p = pow(10, d);
-  cout << 9 * d + n / p << endl;
+
+  int odd = 0;
+
+  for (int i = 0; i < n; i++) {
+    int t;
+    cin >> t;
+
+    if (t & 1)
+      odd++;
+  }
+
+  if (odd & 1) {
+    cout << "NO" << endl;
+  } else {
+    cout << "YES" << endl;
+  }
 }
-e
+
 int main() {
   fastIO();
   int t;

@@ -1,9 +1,6 @@
-#include <cmath>
 #include <iostream>
 
 using namespace std;
-
-typedef long long ll;
 
 void fastIO() {
   ios::sync_with_stdio(0);
@@ -11,18 +8,23 @@ void fastIO() {
 }
 
 void solve() {
-  int n;
-  cin >> n;
-  int d = log10(n);
-  int p = pow(10, d);
-  cout << 9 * d + n / p << endl;
+  int n, k;
+  cin >> n >> k;
+
+  for (int x = 0; x < 2; ++x) {
+    if (n - x * k >= 0 && (n - x * k) % 2 == 0) {
+      cout << "YES" << endl;
+      return;
+    }
+  }
+
+  cout << "NO" << endl;
 }
-e
+
 int main() {
   fastIO();
   int t;
   cin >> t;
-
   while (t--)
     solve();
 

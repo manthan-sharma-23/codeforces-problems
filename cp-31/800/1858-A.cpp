@@ -1,4 +1,3 @@
-#include <cmath>
 #include <iostream>
 
 using namespace std;
@@ -11,13 +10,19 @@ void fastIO() {
 }
 
 void solve() {
-  int n;
-  cin >> n;
-  int d = log10(n);
-  int p = pow(10, d);
-  cout << 9 * d + n / p << endl;
+  int a, b, c;
+  cin >> a >> b >> c;
+
+  if ((c & 1))
+    b--;
+
+  if (a > b) {
+    cout << "First" << endl;
+  } else {
+    cout << "Second" << endl;
+  }
 }
-e
+
 int main() {
   fastIO();
   int t;

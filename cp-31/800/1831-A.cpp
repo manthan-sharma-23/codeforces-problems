@@ -1,5 +1,5 @@
-#include <cmath>
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -13,11 +13,22 @@ void fastIO() {
 void solve() {
   int n;
   cin >> n;
-  int d = log10(n);
-  int p = pow(10, d);
-  cout << 9 * d + n / p << endl;
+
+  int maxT = 0;
+
+  vector<int> a(n);
+
+  for (int i = 0; i < n; i++) {
+    cin >> a[i];
+    maxT = max(maxT, a[i]);
+  }
+  for (int i = 0; i < n; i++) {
+    cout << maxT - a[i] + 1 << " ";
+  }
+
+  cout << endl;
 }
-e
+
 int main() {
   fastIO();
   int t;
