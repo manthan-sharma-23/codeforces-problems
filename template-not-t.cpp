@@ -13,11 +13,7 @@ void solve() {}
 
 int main() {
   fastIO();
-  int t;
-  cin >> t;
-
-  while (t--)
-    solve();
+  solve();
 
   return 0;
 }
