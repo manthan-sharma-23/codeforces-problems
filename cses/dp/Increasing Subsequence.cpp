@@ -18,31 +18,18 @@ void solve() {
   for (int i = 0; i < n; i++)
     cin >> a[i];
 
-  vector<int> dp(n, 1);
-  int maxi = 1;
+  vector<int> dp;
 
-  for (int i = 1; i < n; i++) {
-    int l = 0, h = i - 1, res = -1;
-
-    while (l <= h) {
-      int mid = l + ((h - l) / 2);
-
-      if (a[mid] < a[i]) {
-        res = mid;
-        l = mid + 1;
-      } else {
-        h = mid - 1;
-      }
-    }
-
-    if (res != -1) {
-      dp[i] = max(dp[i], dp[res] + 1);
-    }
-
-    maxi = max(maxi, dp[i]);
+  for (int i = 0; i < n; i++) {
+    int val = a[i];
+    auto it = lower_bound(dp.begin(), dp.end(), val);
+    if (it == dp.end())
+      dp.push_back(val);
+    else
+      *it = val;
   }
 
-  cout << maxi << endl;
+  cout << dp.size() << endl;
 }
 
 int main() {
