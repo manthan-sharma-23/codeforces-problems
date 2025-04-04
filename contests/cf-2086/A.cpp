@@ -9,11 +9,20 @@ void fastIO() {
   cin.tie(0);
 }
 
-void solve() {}
+void solve() {
+  ll n;
+  cin >> n;
+
+  cout << 2 * n << endl;
+}
 
 int main() {
   fastIO();
-  solve();
+  int t;
+  cin >> t;
+
+  while (t--)
+    solve();
 
   return 0;
 }
