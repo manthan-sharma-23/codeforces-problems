@@ -6,11 +6,6 @@
   cin >> t;                                                                    \
   while (t--)
 #define each(x, v) for (auto &x : v)
-#define minHeap(T) priority_queue<T, vector<T>, greater<T>>
-#define maxHeap(T) priority_queue<T>
-#define hashMap(T1, T2) unordered_map<T1, T2>
-#define hashSet(T) unordered_set<T>
-
 using namespace std;
 
 typedef long long ll;

@@ -54,7 +54,30 @@ ll mod_expo(ll base, ll exp, ll mod) {
 }
 ll mod_inv(ll a, ll mod) { return mod_expo(a, mod - 2, mod); }
 
-void solve() {}
+void solve() {
+  minHeap(int) heap;
+
+  int n;
+  cin >> n;
+
+  for (int i = 0; i < n; i++) {
+    int t;
+    cin >> t;
+    heap.push(t);
+  }
+
+  while (heap.size() > 1) {
+    int e1 = heap.top();
+    heap.pop();
+    int e2 = heap.top();
+    heap.pop();
+
+    int replace = e1 + e2 - 1;
+    heap.push(replace);
+  }
+
+  cout << heap.top() << endl;
+}
 
 int main() {
   fastIO();
