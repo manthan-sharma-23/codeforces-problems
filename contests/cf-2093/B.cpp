@@ -41,10 +41,6 @@ void sieve() {
   }
 }
 
-bool triangle(int x, int y, int z) {
-  return x + y > z && z + y > x && x + z > y;
-}
-
 ll mod_expo(ll base, ll exp, ll mod) {
   ll result = 1;
   while (exp > 0) {
@@ -59,24 +55,18 @@ ll mod_expo(ll base, ll exp, ll mod) {
 ll mod_inv(ll a, ll mod) { return mod_expo(a, mod - 2, mod); }
 
 void solve() {
-  int x;
-  cin >> x;
+  string num;
+  cin >> num;
+  int numberFromed = 0;
+  int maxLeadZero = 0;
 
-  int low = 1, high = x - 1;
-  int ans = -1;
-  while (low <= high) {
-    int y = low + (high - low) / 2;
-    int z = y ^ x;
-
-    if (triangle(x, y, z)) {
-      ans = y;
-      break;
-    } else {
-      low = y + 1;
-    }
+  each(d, num) {
+    if (d == '0')
+      maxLeadZero++;
+    else
+      numberFromed = max(numberFromed, maxLeadZero + 1);
   }
-
-  cout << ans << endl;
+  cout << num.size() - numberFromed << endl;
 }
 
 int main() {

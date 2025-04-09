@@ -41,10 +41,6 @@ void sieve() {
   }
 }
 
-bool triangle(int x, int y, int z) {
-  return x + y > z && z + y > x && x + z > y;
-}
-
 ll mod_expo(ll base, ll exp, ll mod) {
   ll result = 1;
   while (exp > 0) {
@@ -59,24 +55,32 @@ ll mod_expo(ll base, ll exp, ll mod) {
 ll mod_inv(ll a, ll mod) { return mod_expo(a, mod - 2, mod); }
 
 void solve() {
-  int x;
-  cin >> x;
+  int n;
+  cin >> n;
+  string s;
+  cin >> s;
 
-  int low = 1, high = x - 1;
-  int ans = -1;
-  while (low <= high) {
-    int y = low + (high - low) / 2;
-    int z = y ^ x;
+  vector<pair<char, int>> freq;
 
-    if (triangle(x, y, z)) {
-      ans = y;
-      break;
+  int cnt = 1;
+  char el = s[0];
+  for (int i = 1; i < s.length(); i++) {
+    if (el == s[i]) {
+      cnt++;
     } else {
-      low = y + 1;
+      freq.push_back({el, cnt});
+      el = s[i];
+      cnt = 1;
     }
   }
+  if (cnt > 0)
+    freq.push_back({el, cnt});
 
-  cout << ans << endl;
+  if (freq[0].first == '0') {
+    cout << freq.size() - 1 << endl;
+  } else {
+    cout << freq.size() << endl;
+  }
 }
 
 int main() {

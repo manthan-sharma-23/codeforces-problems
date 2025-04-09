@@ -14,7 +14,7 @@
 using namespace std;
 
 typedef long long ll;
-const int MOD = 1e9 + 7;
+const int MOD = 1000000007;
 void fastIO() {
   ios::sync_with_stdio(0);
   cin.tie(0);
@@ -28,7 +28,7 @@ void compute_factorials() {
   }
 }
 
-const int MAX_SIEVE = 1e6;
+const int MAX_SIEVE = 1000000;
 vector<bool> isPrime(MAX_SIEVE + 1, 1);
 void sieve() {
   isPrime[0] = isPrime[1] = 0;
@@ -39,10 +39,6 @@ void sieve() {
       }
     }
   }
-}
-
-bool triangle(int x, int y, int z) {
-  return x + y > z && z + y > x && x + z > y;
 }
 
 ll mod_expo(ll base, ll exp, ll mod) {
@@ -58,25 +54,34 @@ ll mod_expo(ll base, ll exp, ll mod) {
 }
 ll mod_inv(ll a, ll mod) { return mod_expo(a, mod - 2, mod); }
 
-void solve() {
-  int x;
-  cin >> x;
+bool isPrimeS(ll n) {
+  if (n < 2)
+    return false;
+  if (n == 2 || n == 3)
+    return true;
+  if (n % 2 == 0 || n % 3 == 0)
+    return false;
 
-  int low = 1, high = x - 1;
-  int ans = -1;
-  while (low <= high) {
-    int y = low + (high - low) / 2;
-    int z = y ^ x;
-
-    if (triangle(x, y, z)) {
-      ans = y;
-      break;
-    } else {
-      low = y + 1;
-    }
+  for (ll i = 5; i * i <= n; i += 6) {
+    if (n % i == 0 || n % (i + 2) == 0)
+      return false;
   }
+  return true;
+}
 
-  cout << ans << endl;
+void solve() {
+  long long n;
+  cin >> n;
+
+  int k;
+  cin >> k;
+
+  bool isP = isPrimeS(n);
+  if ((n == 1 && k == 2) || (isP && k == 1)) {
+    cout << "Yes" << endl;
+  } else {
+    cout << "No" << endl;
+  }
 }
 
 int main() {
