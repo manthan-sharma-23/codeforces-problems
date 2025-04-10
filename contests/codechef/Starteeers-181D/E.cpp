@@ -54,26 +54,34 @@ ll mod_expo(ll base, ll exp, ll mod) {
 }
 ll mod_inv(ll a, ll mod) { return mod_expo(a, mod - 2, mod); }
 
-ll _sqrt(ll n) {
-  if (n == 0 || n == 1)
-    return n;
+void solve() {
+  int rows, cols;
+  cin >> rows >> cols;
+  vector<vector<int>> matrix(rows, vector<int>(cols));
 
-  ll low = 1, high = n, ans = 0;
-  while (low <= high) {
-    ll mid = low + (high - low) / 2;
-    if (mid * mid == n)
-      return mid;
-    else if (mid * mid < n) {
-      ans = mid;
-      low = mid + 1;
-    } else {
-      high = mid - 1;
+  for (int i = 0; i < rows; i++)
+    for (int j = 0; j < cols; j++)
+      cin >> matrix[i][j];
+
+  int totalCells = rows * cols, minChanges = totalCells;
+  vector<pair<int, int>> directions = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
+
+  for (auto [rowDir, colDir] : directions) {
+    unordered_map<int, int> frequency;
+    int maxFrequency = 0;
+
+    for (int row = 0; row < rows; row++) {
+      for (int col = 0; col < cols; col++) {
+        int adjustedValue = matrix[row][col] - (row * rowDir + col * colDir);
+        maxFrequency = max(maxFrequency, ++frequency[adjustedValue]);
+      }
     }
-  }
-  return ans;
-}
 
-void solve() {}
+    minChanges = min(minChanges, totalCells - maxFrequency);
+  }
+
+  cout << minChanges << endl;
+}
 
 int main() {
   fastIO();

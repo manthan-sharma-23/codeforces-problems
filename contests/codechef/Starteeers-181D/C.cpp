@@ -6,10 +6,10 @@
   cin >> t;                                                                    \
   while (t--)
 #define each(x, v) for (auto &x : v)
-#define min_heap(T) priority_queue<T, vector<T>, greater<T>>
-#define max_heap(T) priority_queue<T>
-#define hash_map(T1, T2) unordered_map<T1, T2>
-#define hash_set(T) unordered_set<T>
+#define minHeap(T) priority_queue<T, vector<T>, greater<T>>
+#define maxHeap(T) priority_queue<T>
+#define hashMap(T1, T2) unordered_map<T1, T2>
+#define hashSet(T) unordered_set<T>
 
 using namespace std;
 
@@ -54,26 +54,27 @@ ll mod_expo(ll base, ll exp, ll mod) {
 }
 ll mod_inv(ll a, ll mod) { return mod_expo(a, mod - 2, mod); }
 
-ll _sqrt(ll n) {
-  if (n == 0 || n == 1)
-    return n;
+void solve() {
+  int n;
+  cin >> n;
+  string s;
+  cin >> s;
 
-  ll low = 1, high = n, ans = 0;
-  while (low <= high) {
-    ll mid = low + (high - low) / 2;
-    if (mid * mid == n)
-      return mid;
-    else if (mid * mid < n) {
-      ans = mid;
-      low = mid + 1;
-    } else {
-      high = mid - 1;
+  int normal = 0;
+  ll ans = 1;
+  for (int i = 0; i < n; i++) {
+    if (s[i] == '0')
+      normal++;
+    else
+      normal--;
+
+    if (normal == 0) {
+      ans *= 2;
     }
   }
-  return ans;
-}
 
-void solve() {}
+  cout << ans << endl;
+}
 
 int main() {
   fastIO();
