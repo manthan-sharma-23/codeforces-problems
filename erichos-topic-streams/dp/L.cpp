@@ -86,7 +86,30 @@ ll nCr(int n, int r) {
   return fact[n] / (fact[r] * fact[n - r]);
 }
 
-void solve() {}
+void solve() {
+  int n, k;
+  cin >> n;
+
+  vector<vector<int>> requests(n + 1, vector<int>(2, 0));
+
+  for (int i = 1; i <= n; i++)
+    cin >> requests[i][1];
+  for (int i = 1; i <= n; i++)
+    cin >> requests[i][0];
+
+  cin >> k;
+  vector<int> tables(k + 1, 0);
+  for (int i = 1; i <= k; i++)
+    cin >> tables[i];
+
+  vector<vector<int>> dp(n + 1, vector<int>(k + 1, 0));
+
+  for (int i = 1; i <= n; i++) {
+    for (int j = 1; j <= k; j++) {
+      
+    }
+  }
+}
 
 int main() {
   fastIO();

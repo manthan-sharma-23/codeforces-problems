@@ -86,7 +86,68 @@ ll nCr(int n, int r) {
   return fact[n] / (fact[r] * fact[n - r]);
 }
 
-void solve() {}
+const int type1 = 0, type2 = 1, type3 = 2, type4 = 3;
+
+typedef pair<int, pair<int, int>> Q;
+int n;
+hash_map(int, ll) memo;
+
+ll f(int i, ll l, ll r, const vector<Q> queries) {
+  if (i == n) {
+    return l + r;
+  }
+
+  if (memo.find(i) != memo.end()) {
+    return memo[i];
+  }
+
+  const Q &query = queries[i];
+
+  ll maxR = 0;
+  if (query.first == type1) {
+    maxR = max<ll>(
+        f(i + 1, l, r + query.second.first + query.second.second, queries),
+        f(i + 1, l + query.second.first + query.second.second, r, queries));
+  } else if (query.first == type2) {
+    maxR = f(i + 1, l + query.second.first, r * query.second.second, queries);
+  } else if (query.first == type3) {
+    maxR = f(i + 1, l * query.second.first, r * query.second.second, queries);
+  } else {
+    maxR = f(i + 1, l * query.second.first, r + query.second.second, queries);
+  }
+
+  return memo[i] = max(memo[i], maxR);
+}
+
+void solve() {
+  cin >> n;
+
+  vector<Q> queries;
+
+  for (int i = 0; i < n; i++) {
+    string a, b, c, d;
+    cin >> a >> b >> c >> d;
+
+    int e1 = stoi(b), e2 = stoi(d);
+
+    if (a == "x" && c == "x") {
+      queries.push_back({type3, {e1, e2}});
+    } else if (a == "+" && c == "+") {
+      if (queries[queries.size() - 1].first == type1) {
+        queries[queries.size() - 1].second.first += e1;
+        queries[queries.size() - 1].second.second += e2;
+      } else
+        queries.push_back({type1, {e1, e2}});
+    } else {
+      if (a == "x")
+        queries.push_back({type4, {e1, e2}});
+      else
+        queries.push_back({type2, {e1, e2}});
+    }
+  }
+
+  cout << f(0, 0, 0, queries) << endl;
+}
 
 int main() {
   fastIO();

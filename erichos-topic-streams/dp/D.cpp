@@ -73,25 +73,47 @@ ll _sqrt(ll n) {
   return ans;
 }
 
-ll nCrMod(int n, int r) {
-  if (r > n)
-    return 0;
-  return (fact[n] * mod_inv(fact[r], MOD) % MOD) * mod_inv(fact[n - r], MOD) %
-         MOD;
-}
+void solve() {
+  int n, k;
+  cin >> n >> k;
 
-ll nCr(int n, int r) {
-  if (r > n)
-    return 0;
-  return fact[n] / (fact[r] * fact[n - r]);
-}
+  vector<int> a(n), t(n);
 
-void solve() {}
+  for (int i = 0; i < n; i++) {
+    cin >> a[i];
+  }
+  for (int i = 0; i < n; i++) {
+    cin >> t[i];
+  }
+
+  vector<ll> prefT(n, 0);
+  ll aSum = 0;
+
+  for (int i = 0; i < n; i++) {
+    if (t[i] == 1) {
+      aSum += a[i];
+    }
+
+    if (i == 0)
+      prefT[i] = (t[i] == 0 ? a[i] : 0);
+    else
+      prefT[i] = prefT[i - 1] + (t[i] == 0 ? a[i] : 0);
+  }
+
+  ll maxi = 0;
+  for (int i = 0; i + k - 1 < n; i++) {
+    int j = i + k - 1;
+    ll sSum = prefT[j] - (i > 0 ? prefT[i - 1] : 0LL);
+    maxi = max(sSum + aSum, maxi);
+  }
+
+  cout << maxi << endl;
+}
 
 int main() {
   fastIO();
 
-  tc solve();
+  solve();
 
   return 0;
 }

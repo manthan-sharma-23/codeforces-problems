@@ -86,12 +86,48 @@ ll nCr(int n, int r) {
   return fact[n] / (fact[r] * fact[n - r]);
 }
 
-void solve() {}
+int v1, v2, d, t;
+unordered_map<int, unordered_map<int, int>> memo;
+int f(int time, int lastV) {
+  if (time == t) {
+    if (abs(v2 - lastV) <= d) {
+      return v2;
+    } else
+      return INT_MIN;
+  }
+
+  if (memo[time].count(lastV)) {
+    return memo[time][lastV];
+  }
+
+  int maxD = lastV + f(time + 1, lastV);
+  for (int i = 1; i <= d; i++) {
+    maxD = max(maxD, (lastV + i) + f(time + 1, lastV + i));
+    if (lastV >= d)
+      maxD = max(maxD, (lastV - i) + f(time + 1, lastV - i));
+  }
+
+  return memo[time][lastV] = maxD;
+}
+
+void solve() {
+  cin >> v1 >> v2;
+  cin >> t >> d;
+
+  if (t == 2) {
+    cout << v1 + v2 << endl;
+    return;
+  }
+
+  int ans = v1 + f(2, v1);
+
+  cout << ans << endl;
+}
 
 int main() {
   fastIO();
 
-  tc solve();
+  solve();
 
   return 0;
 }

@@ -86,7 +86,56 @@ ll nCr(int n, int r) {
   return fact[n] / (fact[r] * fact[n - r]);
 }
 
-void solve() {}
+int n;
+vector<int> a, b, c;
+vector<vector<ll>> memo;
+
+ll f(int i, bitset<3> stage) {
+  if (i == n) {
+    return stage.count() == 3 ? 0 : INT_MIN;
+  } 
+
+  int mask = (int)stage.to_ulong();
+  if (memo[i][mask] != LLONG_MIN)
+    return memo[i][mask];
+
+  ll pick0 = f(i + 1, stage), pickA = INT_MIN, pickB = INT_MIN, pickC = INT_MIN;
+
+  if (!stage.test(0)) {
+    stage.flip(0);
+    pickA = a[i] + f(i + 1, stage);
+    stage.flip(0);
+  }
+
+  if (!stage.test(1)) {
+    stage.flip(1);
+    pickB = b[i] + f(i + 1, stage);
+    stage.flip(1);
+  }
+
+  if (!stage.test(2)) {
+    stage.flip(2);
+    pickC = c[i] + f(i + 1, stage);
+    stage.flip(2);
+  }
+
+  return memo[i][mask] = max<ll>({pick0, pickA, pickB, pickC});
+}
+
+void solve() {
+  cin >> n;
+  a.resize(n), b.resize(n), c.resize(n);
+  memo.assign(n + 1, vector<ll>(8, LLONG_MIN)); // 8 = 2^3
+
+  for (int i = 0; i < n; i++)
+    cin >> a[i];
+  for (int i = 0; i < n; i++)
+    cin >> b[i];
+  for (int i = 0; i < n; i++)
+    cin >> c[i];
+
+  cout << f(0, bitset<3>(0)) << endl;
+}
 
 int main() {
   fastIO();

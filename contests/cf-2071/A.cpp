@@ -86,7 +86,18 @@ ll nCr(int n, int r) {
   return fact[n] / (fact[r] * fact[n - r]);
 }
 
-void solve() {}
+const vector<int> arr = {0, 1, 1, 0, 1, 1};
+
+void solve() {
+  int k;
+  cin >> k;
+
+  if (!arr[(k - 1) % 6]) {
+    cout << "Yes" << endl;
+  } else {
+    cout << "No" << endl;
+  }
+}
 
 int main() {
   fastIO();

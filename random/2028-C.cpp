@@ -86,7 +86,57 @@ ll nCr(int n, int r) {
   return fact[n] / (fact[r] * fact[n - r]);
 }
 
-void solve() {}
+void solve() {
+  int n, m, v;
+  cin >> n >> m >> v;
+
+  vector<int> a(n + 1, 0);
+
+  for (int i = 1; i <= n; i++)
+    cin >> a[i];
+
+  vector<int> pref(n + 1, 0);
+  for (int i = 1; i <= n; i++)
+    pref[i] = pref[i - 1] + a[i];
+
+  vector<int> partsWithV;
+  int i = 1;
+  while (i <= n) {
+    ll low = i, high = n, res = n;
+
+    while (low <= high) {
+      ll mid = low + (high - low) / 2;
+      int sumV = pref[mid] - pref[i - 1];
+      if (sumV >= v) {
+        res = mid;
+        high = mid - 1;
+      } else {
+        low = mid + 1;
+      }
+    }
+
+    partsWithV.push_back(pref[res] - pref[i - 1]);
+
+    i = res + 1;
+  }
+
+  each(it, partsWithV) { cout << it << " "; }
+  cout << endl;
+
+  if (partsWithV.size() < m) {
+    cout << -1 << endl;
+    return;
+  }
+
+  sort(partsWithV.begin(), partsWithV.end());
+
+  int gSum = 0;
+  for (int i = 0; i < m && i < partsWithV.size(); i++) {
+    gSum += partsWithV[i];
+  }
+
+  cout << accumulate(partsWithV.begin(), partsWithV.end(), 0) - gSum << endl;
+}
 
 int main() {
   fastIO();

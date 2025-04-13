@@ -86,12 +86,40 @@ ll nCr(int n, int r) {
   return fact[n] / (fact[r] * fact[n - r]);
 }
 
-void solve() {}
+void solve() {
+  int n;
+  cin >> n;
+
+  vector<ll> font(n + 1, 0), cost(n + 1, 0);
+
+  for (int i = 1; i <= n; i++)
+    cin >> font[i];
+  for (int i = 1; i <= n; i++)
+    cin >> cost[i];
+
+  vector<vector<ll>> dp(4, vector<ll>(n + 1, INT_MAX));
+
+  for (int i = 0; i <= n; i++)
+    dp[0][i] = 0LL;
+
+  for (int k = 1; k <= 3; k++) {
+    for (int i = 1; i <= n; i++) {
+      for (int j = 0; j < i; j++) {
+        if (font[j] < font[i]) {
+          dp[k][i] = min<ll>(dp[k][i], cost[i] + dp[k - 1][j]);
+        }
+      }
+    }
+  }
+
+  ll ans = *min_element(dp[3].begin(), dp[3].end());
+  cout << ((ans == INT_MAX) ? -1 : ans) << endl;
+}
 
 int main() {
   fastIO();
 
-  tc solve();
+  solve();
 
   return 0;
 }

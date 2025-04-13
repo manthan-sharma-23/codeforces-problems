@@ -73,25 +73,48 @@ ll _sqrt(ll n) {
   return ans;
 }
 
-ll nCrMod(int n, int r) {
-  if (r > n)
+ll f(int i, int j, const vector<int> &a, const vector<int> &b, const int &n,
+     const int &k, const int &p, vector<vector<ll>> &memo) {
+  if (i == n) {
     return 0;
-  return (fact[n] * mod_inv(fact[r], MOD) % MOD) * mod_inv(fact[n - r], MOD) %
-         MOD;
+  }
+  if (j == k) {
+    return INT_MAX;
+  }
+
+  if (memo[i][j] != -1)
+    return memo[i][j];
+
+  ll timeForThisCase = abs<ll>(a[i] - b[j]) + abs<ll>(p - b[j]);
+  ll pick = max<ll>(timeForThisCase, f(i + 1, j + 1, a, b, n, k, p, memo));
+  ll notPick = f(i, j + 1, a, b, n, k, p, memo);
+
+  return memo[i][j] = min<ll>(pick, notPick);
 }
 
-ll nCr(int n, int r) {
-  if (r > n)
-    return 0;
-  return fact[n] / (fact[r] * fact[n - r]);
-}
+void solve() {
+  int n, k, p;
+  cin >> n >> k >> p;
 
-void solve() {}
+  vector<int> a(n), b(k);
+
+  for (int i = 0; i < n; i++)
+    cin >> a[i];
+  for (int i = 0; i < k; i++)
+    cin >> b[i];
+
+  sort(a.begin(), a.end());
+  sort(b.begin(), b.end());
+
+  vector<vector<ll>> memo(n + 1, vector<ll>(k + 1, -1LL));
+
+  cout << f(0, 0, a, b, n, k, p, memo) << endl;
+}
 
 int main() {
   fastIO();
 
-  tc solve();
+  solve();
 
   return 0;
 }

@@ -21,10 +21,10 @@ void fastIO() {
 }
 const int MAX_FACTORIAL = 500001;
 vector<ll> fact(MAX_FACTORIAL + 1);
-void compute_factorials() {
+void compute_factorials(const int max_FACT = MAX_FACTORIAL) {
   fact[0] = 1;
-  for (int i = 1; i <= MAX_FACTORIAL; i++) {
-    fact[i] = (fact[i - 1] * i) % MOD;
+  for (int i = 1; i <= max_FACT; i++) {
+    fact[i] = (fact[i - 1] * i);
   }
 }
 
@@ -86,12 +86,40 @@ ll nCr(int n, int r) {
   return fact[n] / (fact[r] * fact[n - r]);
 }
 
-void solve() {}
+void solve() {
+  int n, k;
+  cin >> n >> k;
+  if (k > n) {
+    cout << 0 << endl;
+    return;
+  }
+  if (k == n) {
+    cout << 1 << endl;
+    return;
+  }
+
+  compute_factorials(n);
+
+  vector<vector<ll>> dp(n + 1, vector<ll>(k + 1, 0));
+
+  for (int i = 0; i <= n; i++) {
+    dp[i][0] = 1;
+  }
+
+  for (int i = 1; i <= n; i++) {
+    for (int j = 1; j <= k; j++) {
+      int c = n - k;
+      if (c >= 0) {
+        // dp[i][j] = ;
+      }
+    }
+  }
+
+  cout << nCr(n, k) << endl;
+}
 
 int main() {
   fastIO();
-
-  tc solve();
-
+  solve();
   return 0;
 }

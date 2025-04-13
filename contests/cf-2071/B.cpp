@@ -19,10 +19,12 @@ void fastIO() {
   ios::sync_with_stdio(0);
   cin.tie(0);
 }
-const int MAX_FACTORIAL = 500001;
-vector<ll> fact(MAX_FACTORIAL + 1);
+
+const int MAX_FACTORIAL =
+    100005; // Reduce size to avoid unnecessary memory usage
+vector<ll> fact(MAX_FACTORIAL + 1, 1);
+
 void compute_factorials() {
-  fact[0] = 1;
   for (int i = 1; i <= MAX_FACTORIAL; i++) {
     fact[i] = (fact[i - 1] * i) % MOD;
   }
@@ -52,6 +54,7 @@ ll mod_expo(ll base, ll exp, ll mod) {
   }
   return result;
 }
+
 ll mod_inv(ll a, ll mod) { return mod_expo(a, mod - 2, mod); }
 
 ll _sqrt(ll n) {
@@ -80,18 +83,39 @@ ll nCrMod(int n, int r) {
          MOD;
 }
 
-ll nCr(int n, int r) {
-  if (r > n)
-    return 0;
-  return fact[n] / (fact[r] * fact[n - r]);
+bool isPerfectSquare(ll n) {
+  if (n < 0)
+    return false;
+  ll sqrtN = sqrt(n);
+  return sqrtN * sqrtN == n;
 }
 
-void solve() {}
+void solve() {
+  int n;
+  cin >> n;
+
+  ll sum = (1LL * n * (n + 1)) / 2;
+  if (isPerfectSquare(sum)) {
+    cout << -1 << endl;
+    return;
+  }
+
+  vector<int> numbers(n);
+  iota(numbers.begin(), numbers.end(), 1); // Fills numbers from 1 to n
+
+  for (int i = n - 2; i >= 0; i--) {
+    ll partialSum = (1LL * (i + 1) * (i + 2)) / 2;
+    if (isPerfectSquare(partialSum)) {
+      swap(numbers[i], numbers[i + 1]);
+    }
+  }
+
+  each(v, numbers) { cout << v << " "; }
+  cout << endl;
+}
 
 int main() {
   fastIO();
-
   tc solve();
-
   return 0;
 }
