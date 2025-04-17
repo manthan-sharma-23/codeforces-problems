@@ -85,43 +85,45 @@ ll nCr(int n, int r) {
     return 0;
   return fact[n] / (fact[r] * fact[n - r]);
 }
+
 void solve() {
-  string n;
-  int m;
+  int n, q;
 
-  cin >> n >> m;
+  cin >> n >> q;
 
-  hash_map(int, ll) cache;
+  vector<vector<int>> grid(n + 1, vector<int>(n + 1, 0));
 
-  each(d, n) {
-    int digit = d - '0';
-    cache[digit]++;
-  }
-
-  while (m--) {
-    hash_map(int, ll) new_cache;
-
-    new_cache[0] = cache[9] % MOD;
-    new_cache[1] = (cache[9] + cache[0]) % MOD;
-    for (int i = 2; i <= 9; i++) {
-      new_cache[i] = cache[i - 1] % MOD;
+  char ch;
+  for (int i = 1; i <= n; i++) {
+    for (int j = 1; j <= n; j++) {
+      cin >> ch;
+      grid[i][j] = ch == '*';
     }
-
-    cache = new_cache;
   }
 
-  ll res = 0;
-  for (auto &[_, count] : cache) {
-    res = (res + count) % MOD;
+  vector<vector<int>> pref(n + 1, vector<int>(n + 1, 0));
+
+  for (int i = 1; i <= n; i++) {
+    for (int j = 1; j <= n; j++) {
+      pref[i][j] =
+          grid[i][j] + pref[i - 1][j] + pref[i][j - 1] - pref[i - 1][j - 1];
+    }
   }
 
-  cout << res << endl;
+  while (q--) {
+    int x1, y1, x2, y2;
+    cin >> x1 >> y1 >> x2 >> y2;
+
+    cout << pref[x2][y2] - pref[x1 - 1][y2] - pref[x2][y1 - 1] +
+                pref[x1 - 1][y1 - 1]
+         << endl;
+  }
 }
 
 int main() {
   fastIO();
 
-  tc solve();
+  solve();
 
   return 0;
 }

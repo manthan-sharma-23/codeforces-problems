@@ -85,37 +85,11 @@ ll nCr(int n, int r) {
     return 0;
   return fact[n] / (fact[r] * fact[n - r]);
 }
+
 void solve() {
-  string n;
-  int m;
+  int n, k;
 
-  cin >> n >> m;
-
-  hash_map(int, ll) cache;
-
-  each(d, n) {
-    int digit = d - '0';
-    cache[digit]++;
-  }
-
-  while (m--) {
-    hash_map(int, ll) new_cache;
-
-    new_cache[0] = cache[9] % MOD;
-    new_cache[1] = (cache[9] + cache[0]) % MOD;
-    for (int i = 2; i <= 9; i++) {
-      new_cache[i] = cache[i - 1] % MOD;
-    }
-
-    cache = new_cache;
-  }
-
-  ll res = 0;
-  for (auto &[_, count] : cache) {
-    res = (res + count) % MOD;
-  }
-
-  cout << res << endl;
+  cin >> n >> k;
 }
 
 int main() {

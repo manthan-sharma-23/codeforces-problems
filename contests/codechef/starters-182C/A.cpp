@@ -85,37 +85,25 @@ ll nCr(int n, int r) {
     return 0;
   return fact[n] / (fact[r] * fact[n - r]);
 }
+
 void solve() {
-  string n;
-  int m;
+  int n;
+  cin >> n;
 
-  cin >> n >> m;
+  string s;
+  cin >> s;
 
-  hash_map(int, ll) cache;
+  ll boys = 0, girls = 0;
 
-  each(d, n) {
-    int digit = d - '0';
-    cache[digit]++;
+  int i = 0;
+  while (i < n && boys <= girls * 2) {
+    if (s[i++] == 'B')
+      boys++;
+    else
+      girls++;
   }
 
-  while (m--) {
-    hash_map(int, ll) new_cache;
-
-    new_cache[0] = cache[9] % MOD;
-    new_cache[1] = (cache[9] + cache[0]) % MOD;
-    for (int i = 2; i <= 9; i++) {
-      new_cache[i] = cache[i - 1] % MOD;
-    }
-
-    cache = new_cache;
-  }
-
-  ll res = 0;
-  for (auto &[_, count] : cache) {
-    res = (res + count) % MOD;
-  }
-
-  cout << res << endl;
+  cout << boys + girls << endl;
 }
 
 int main() {

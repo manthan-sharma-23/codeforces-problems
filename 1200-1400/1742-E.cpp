@@ -85,37 +85,46 @@ ll nCr(int n, int r) {
     return 0;
   return fact[n] / (fact[r] * fact[n - r]);
 }
+
 void solve() {
-  string n;
-  int m;
+  int n, q;
+  cin >> n >> q;
 
-  cin >> n >> m;
+  vector<int> a(n + 1, 0);
+  vector<ll> p(n + 1, 0);
 
-  hash_map(int, ll) cache;
-
-  each(d, n) {
-    int digit = d - '0';
-    cache[digit]++;
+  for (int i = 1; i <= n; i++) {
+    cin >> a[i];
+    p[i] = a[i] + p[i - 1];
   }
 
-  while (m--) {
-    hash_map(int, ll) new_cache;
+  hash_map(int, int) mp;
+  int currMax = 0LL;
+  mp[currMax] = 0LL;
 
-    new_cache[0] = cache[9] % MOD;
-    new_cache[1] = (cache[9] + cache[0]) % MOD;
-    for (int i = 2; i <= 9; i++) {
-      new_cache[i] = cache[i - 1] % MOD;
-    }
-
-    cache = new_cache;
+  for (int i = 1; i <= n; i++) {
+    currMax = max(currMax, a[i]);
+    if (mp.find(currMax) == mp.end())
+      mp[currMax] = i;
+    else
+      mp[currMax] = max(mp[currMax], i);
   }
 
-  ll res = 0;
-  for (auto &[_, count] : cache) {
-    res = (res + count) % MOD;
+  set<int> st(a.begin(), a.end());
+
+  while (q--) {
+    int k;
+    cin >> k;
+
+    auto ub = st.upper_bound(k);
+
+    --ub;
+    int leg = *ub;
+
+    cout << p[mp[leg]] << " ";
   }
 
-  cout << res << endl;
+  cout << '\n';
 }
 
 int main() {

@@ -22,59 +22,35 @@ void fastIO() {
 vector<vector<int>> adj;
 vector<int> colors;
 int newColor;
-bool isPossible = true;
 
-pair<int, bool> f(int node, int parent) {
-  bool thisNodeColored = false;
-  queue<int> notColored, colored;
+bool dfs(int node, int parent) {
+  vector<int> children;
 
-  for (int &child : adj[node]) {
+  each(child, adj[node]) {
     if (child == parent)
       continue;
 
-    auto r = f(child, node);
-    if (!r.second)
-      notColored.push(r.first);
-    else
-      colored.push(r.first);
+    children.push_back(child);
+    if (!dfs(child, node))
+      return false;
   }
 
-  while (!notColored.empty() && !colored.empty()) {
-    int nc = notColored.front();
-    notColored.pop();
-    int cc = colored.front();
-    colored.pop();
-    colors[nc] = colors[cc];
+  if (parent == -1) {
+    if (children.size() % 2 == 0)
+      return false;
+
+    colors[node] = colors[*children.rbegin()] = ++newColor;
+    children.pop_back();
+  } else {
+    if (children.size() % 2 != 0)
+      return false;
   }
 
-  if (colored.size() == 1) {
-    colors[node] = colors[colored.front()];
-    colored.pop();
-    thisNodeColored = true;
-  } else if (!colored.empty()) {
-    isPossible = false;
-    return {node, false};
+  for (int i = 0; i < children.size(); i += 2) {
+    colors[children[i]] = colors[children[i + 1]] = ++newColor;
   }
 
-  if (!notColored.empty() && notColored.size() % 2 != 0) {
-    colors[node] = colors[notColored.front()] = newColor++;
-    thisNodeColored = true;
-    notColored.pop();
-  }
-
-  while (notColored.size() >= 2) {
-    int nc1 = notColored.front();
-    notColored.pop();
-    int nc2 = notColored.front();
-    notColored.pop();
-    colors[nc1] = colors[nc2] = newColor++;
-  }
-
-  if (!notColored.empty() || !colored.empty()) {
-    isPossible = false;
-  }
-
-  return {node, thisNodeColored};
+  return true;
 }
 
 void solve() {
@@ -83,8 +59,7 @@ void solve() {
 
   adj.assign(n + 1, vector<int>());
   colors.assign(n + 1, 0);
-  newColor = 1;
-  isPossible = true;
+  newColor = 0;
 
   if (n == 1) {
     cout << 1 << endl;
@@ -98,8 +73,8 @@ void solve() {
     adj[u].push_back(i);
   }
 
-  auto res = f(1, -1);
-  if (!res.second || !isPossible) {
+  bool res = dfs(1, -1);
+  if (!res) {
     cout << -1 << endl;
   } else {
     for (int i = 1; i <= n; i++) {

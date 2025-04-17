@@ -87,10 +87,9 @@ public:
     if (n <= 1)
       return;
     active = !active;
-    swap(rizz, revrizz);
   }
 
-  ll rizziness() { return active ? rizz : revrizz; }
+  ll rizziness() { return rizz; }
 };
 
 void solve() {
@@ -105,14 +104,12 @@ void solve() {
       int k;
       cin >> k;
       qds.append(k);
-      cout << qds.rizziness() << '\n';
     } else if (type == 2) {
       qds.reverse();
-      cout << qds.rizziness() << '\n';
     } else {
       qds.cycle();
-      cout << qds.rizziness() << '\n';
     }
+    cout << qds.rizziness() << '\n';
   }
 }
 

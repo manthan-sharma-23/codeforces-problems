@@ -85,43 +85,66 @@ ll nCr(int n, int r) {
     return 0;
   return fact[n] / (fact[r] * fact[n - r]);
 }
-void solve() {
-  string n;
-  int m;
 
-  cin >> n >> m;
+class SegTree {
+public:
+  int n;
+  vector<int> tree;
 
-  hash_map(int, ll) cache;
-
-  each(d, n) {
-    int digit = d - '0';
-    cache[digit]++;
+  SegTree(vector<int> &arr) {
+    n = arr.size();
+    tree.resize(4 * n);
+    build(arr, 0, 0, n - 1);
   }
 
-  while (m--) {
-    hash_map(int, ll) new_cache;
-
-    new_cache[0] = cache[9] % MOD;
-    new_cache[1] = (cache[9] + cache[0]) % MOD;
-    for (int i = 2; i <= 9; i++) {
-      new_cache[i] = cache[i - 1] % MOD;
+  void build(vector<int> &arr, int node, int start, int end) {
+    if (start == end) {
+      tree[node] = arr[start];
+    } else {
+      int mid = (start + end) / 2;
+      build(arr, 2 * node + 1, start, mid);
+      build(arr, 2 * node + 2, mid + 1, end);
+      tree[node] = min(tree[2 * node + 1], tree[2 * node + 2]);
     }
-
-    cache = new_cache;
   }
 
-  ll res = 0;
-  for (auto &[_, count] : cache) {
-    res = (res + count) % MOD;
+  int query(int l, int r) { return queryUtil(0, 0, n - 1, l, r); }
+
+private:
+  int queryUtil(int node, int start, int end, int l, int r) {
+    if (r < start || end < l)
+      return INT_MAX;
+    if (l <= start && end <= r)
+      return tree[node];
+    int mid = (start + end) / 2;
+    int leftMin = queryUtil(2 * node + 1, start, mid, l, r);
+    int rightMin = queryUtil(2 * node + 2, mid + 1, end, l, r);
+    return min(leftMin, rightMin);
+  }
+};
+
+void solve() {
+  int n, q;
+  cin >> n >> q;
+
+  vector<int> a(n);
+  for (int i = 0; i < n; i++) {
+    cin >> a[i];
   }
 
-  cout << res << endl;
+  SegTree sgt(a);
+
+  while (q--) {
+    int l, r;
+    cin >> l >> r; // 1 based
+    l--, r--;
+    cout << sgt.query(l, r) << endl;
+  }
 }
 
 int main() {
   fastIO();
 
-  tc solve();
-
+   solve();
   return 0;
 }

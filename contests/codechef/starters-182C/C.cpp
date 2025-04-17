@@ -85,37 +85,27 @@ ll nCr(int n, int r) {
     return 0;
   return fact[n] / (fact[r] * fact[n - r]);
 }
+
 void solve() {
-  string n;
-  int m;
+  int x, y, z;
 
-  cin >> n >> m;
+  cin >> x >> y >> z;
 
-  hash_map(int, ll) cache;
+  int smallest = min({x, y, z});
 
-  each(d, n) {
-    int digit = d - '0';
-    cache[digit]++;
-  }
+  int second_smallest;
+  if (smallest == x)
+    second_smallest = min(y, z);
+  else if (smallest == y)
+    second_smallest = min(x, z);
+  else
+    second_smallest = min(x, y);
 
-  while (m--) {
-    hash_map(int, ll) new_cache;
+  int largestEven = (smallest / 2 + second_smallest / 2) * 2;
+  if (smallest % 2 != 0 || second_smallest % 2 != 0)
+    largestEven++;
 
-    new_cache[0] = cache[9] % MOD;
-    new_cache[1] = (cache[9] + cache[0]) % MOD;
-    for (int i = 2; i <= 9; i++) {
-      new_cache[i] = cache[i - 1] % MOD;
-    }
-
-    cache = new_cache;
-  }
-
-  ll res = 0;
-  for (auto &[_, count] : cache) {
-    res = (res + count) % MOD;
-  }
-
-  cout << res << endl;
+  cout << largestEven << endl;
 }
 
 int main() {
