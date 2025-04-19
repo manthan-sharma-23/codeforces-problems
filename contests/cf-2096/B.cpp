@@ -1,4 +1,3 @@
-#include <algorithm>
 #include <bits/stdc++.h>
 // manthan's code
 using namespace std;
@@ -106,30 +105,27 @@ ll nCr(int n, int r) {
 }
 
 void solve() {
-  int n;
-  cin >> n;
-  string s;
-  cin >> s;
+  int n, k;
+  cin >> n >> k;
+  vector<int> l(n), r(n);
+  each(it, l) { cin >> it; }
+  each(it, r) { cin >> it; }
 
-  reverse(s.begin(), s.end());
-
-  vector<int> a;
-
-  int high = n, low = 1;
-  each(ch, s) {
-    if (ch == '<') {
-      a.push_back(low++);
-    } else {
-      a.push_back(high--);
-    }
+  vector<ll> b(n);
+  ll took = 0LL;
+  for (int i = 0; i < n; i++) {
+    took += max(l[i], r[i]);
+    b[i] = min(l[i], r[i]);
   }
 
-  a.push_back(low);
+  sort(b.begin(), b.end(), [](int a, int b) { return a > b; });
 
-  reverse(a.begin(), a.end());
+  int i = 0;
 
-  each(v, a) cout << v << " ";
-  cout << endl;
+  while (i + 1 < k && i < n) {
+    took += b[i++];
+  }
+  cout << took + 1 << endl;
 }
 
 int main() {

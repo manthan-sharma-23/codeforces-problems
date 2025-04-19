@@ -7,11 +7,11 @@ class SegmentTree {
 private:
   vector<int> &a;
   const int eachBucketSize = 100;
-  unordered_map<int, vector<ll>> trees;
+  map<int, vector<ll>> trees;
 
   void ensureTree(int tree) {
-    if (!trees.count(tree)) {
-      trees[tree] = vector<ll>(4 * eachBucketSize, 0);
+    if (trees.find(tree) == trees.end()) {
+      trees[tree].assign(4 * eachBucketSize, 0);
     }
   }
 
@@ -22,28 +22,26 @@ private:
       return;
     }
 
-    int mid = s + (e - s) / 2;
+    int mid = (s + e) >> 1;
     if (pos <= mid) {
-      update(tree, 2 * index, s, mid, pos, val);
+      update(tree, index << 1, s, mid, pos, val);
     } else {
-      update(tree, 2 * index + 1, mid + 1, e, pos, val);
+      update(tree, (index << 1) | 1, mid + 1, e, pos, val);
     }
 
-    trees[tree][index] = trees[tree][2 * index] + trees[tree][2 * index + 1];
+    trees[tree][index] =
+        trees[tree][index << 1] + trees[tree][(index << 1) | 1];
   }
 
   ll range(const int tree, int index, int s, int e, int l, int r) {
-    if (!trees.count(tree))
+    if (trees.find(tree) == trees.end() || e < l || s > r)
       return 0;
-    if (e < l || s > r)
-      return 0;
-    if (s >= l && e <= r)
+    if (l <= s && e <= r)
       return trees[tree][index];
 
-    int mid = s + (e - s) / 2;
-    ll left = range(tree, 2 * index, s, mid, l, r);
-    ll right = range(tree, 2 * index + 1, mid + 1, e, l, r);
-    return left + right;
+    int mid = (s + e) >> 1;
+    return range(tree, index << 1, s, mid, l, r) +
+           range(tree, (index << 1) | 1, mid + 1, e, l, r);
   }
 
 public:
@@ -57,11 +55,16 @@ public:
 
   void update(int k, int newSalary) {
     int oldSalary = a[k];
+    if (oldSalary == newSalary)
+      return;
 
-    update(oldSalary / eachBucketSize, 1, 0, eachBucketSize - 1,
-           oldSalary % eachBucketSize, -1);
-    update(newSalary / eachBucketSize, 1, 0, eachBucketSize - 1,
-           newSalary % eachBucketSize, 1);
+    int oldTree = oldSalary / eachBucketSize;
+    int oldPos = oldSalary % eachBucketSize;
+    update(oldTree, 1, 0, eachBucketSize - 1, oldPos, -1);
+
+    int newTree = newSalary / eachBucketSize;
+    int newPos = newSalary % eachBucketSize;
+    update(newTree, 1, 0, eachBucketSize - 1, newPos, 1);
 
     a[k] = newSalary;
   }
@@ -74,7 +77,6 @@ public:
 
     for (int bucket = leftBucket; bucket <= rightBucket; ++bucket) {
       int start = 0, end = eachBucketSize - 1;
-
       if (bucket == leftBucket)
         start = l % eachBucketSize;
       if (bucket == rightBucket)
