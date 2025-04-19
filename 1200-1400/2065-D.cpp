@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 // manthan's code
+
 using namespace std;
 #define tc                                                                     \
   int t;                                                                       \
@@ -8,7 +9,7 @@ using namespace std;
 #define each(x, v) for (auto &x : v)
 #define min_heap(T) priority_queue<T, vector<T>, greater<T>>
 #define max_heap(T) priority_queue<T>
-#define hash_map(T1, T2) unordered_map<T1, T2, custom_hash>
+#define hash_map(T1, T2) unordered_map<T1, T2>
 #define hash_set(T) unordered_set<T>
 
 using ll = long long;
@@ -16,21 +17,6 @@ using ii = pair<int, int>;
 using vii = vector<ii>;
 using vll = vector<ll>;
 using vi = vector<int>;
-
-struct custom_hash {
-  static uint64_t splitmix64(uint64_t x) {
-    x += 0x9e3779b97f4a7c15;
-    x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
-    x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
-    return x ^ (x >> 31);
-  }
-
-  size_t operator()(uint64_t x) const {
-    static const uint64_t FIXED_RANDOM =
-        chrono::steady_clock::now().time_since_epoch().count();
-    return splitmix64(x + FIXED_RANDOM);
-  }
-};
 
 const int MOD = 1e9 + 7;
 void fastIO() {
@@ -104,7 +90,45 @@ ll nCr(int n, int r) {
   return fact[n] / (fact[r] * fact[n - r]);
 }
 
-void solve() {}
+void solve() {
+  int n, m;
+  cin >> n >> m;
+
+  vector<vll> grid(n + 1, vll(m + 1, 0LL));
+  vector<pair<ll, int>> score;
+  vll psumsum(n + 1, 0);
+
+  for (int i = 1; i <= n; i++) {
+    for (int j = 1; j <= m; j++) {
+      cin >> grid[i][j];
+      grid[i][j] += grid[i][j - 1];
+    }
+
+    score.push_back({grid[i][m], i});
+
+    for (int j = 1; j <= m; j++) {
+      psumsum[i] += grid[i][j];
+    }
+  }
+
+  sort(score.begin(), score.end(),
+       [&psumsum](pair<ll, int> &a, pair<ll, int> &b) -> bool {
+         if (a.first == b.first)
+           return psumsum[a.second] < psumsum[b.second];
+         else
+           return a.first > b.first;
+       });
+
+  ll sum = 0LL;
+  ll last = 0LL;
+
+  each(p, score) {
+    sum += (last * m) + psumsum[p.second];
+    last += p.first;
+  }
+
+  cout << sum << endl;
+}
 
 int main() {
   fastIO();

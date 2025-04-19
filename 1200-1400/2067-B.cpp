@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 // manthan's code
-using namespace std;
+
 #define tc                                                                     \
   int t;                                                                       \
   cin >> t;                                                                    \
@@ -11,11 +11,7 @@ using namespace std;
 #define hash_map(T1, T2) unordered_map<T1, T2, custom_hash>
 #define hash_set(T) unordered_set<T>
 
-using ll = long long;
-using ii = pair<int, int>;
-using vii = vector<ii>;
-using vll = vector<ll>;
-using vi = vector<int>;
+using namespace std;
 
 struct custom_hash {
   static uint64_t splitmix64(uint64_t x) {
@@ -32,6 +28,7 @@ struct custom_hash {
   }
 };
 
+typedef long long ll;
 const int MOD = 1e9 + 7;
 void fastIO() {
   ios::sync_with_stdio(0);
@@ -104,7 +101,30 @@ ll nCr(int n, int r) {
   return fact[n] / (fact[r] * fact[n - r]);
 }
 
-void solve() {}
+void solve() {
+  int n;
+  cin >> n;
+
+  vector<int> count(n + 1, 0);
+
+  for (int i = 0; i < n; i++) {
+    int t;
+    cin >> t;
+    count[t]++;
+  }
+
+  for (int i = 1; i <= n; i++) {
+    if (count[i] == 0)
+      continue;
+    else if (count[i] == 1) {
+      cout << "No" << endl;
+      return;
+    } else
+      count[i + 1] += count[i] - 2;
+  }
+
+  cout << "Yes" << endl;
+}
 
 int main() {
   fastIO();

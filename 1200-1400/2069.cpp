@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 // manthan's code
-using namespace std;
+
 #define tc                                                                     \
   int t;                                                                       \
   cin >> t;                                                                    \
@@ -11,11 +11,7 @@ using namespace std;
 #define hash_map(T1, T2) unordered_map<T1, T2, custom_hash>
 #define hash_set(T) unordered_set<T>
 
-using ll = long long;
-using ii = pair<int, int>;
-using vii = vector<ii>;
-using vll = vector<ll>;
-using vi = vector<int>;
+using namespace std;
 
 struct custom_hash {
   static uint64_t splitmix64(uint64_t x) {
@@ -32,6 +28,7 @@ struct custom_hash {
   }
 };
 
+typedef long long ll;
 const int MOD = 1e9 + 7;
 void fastIO() {
   ios::sync_with_stdio(0);
@@ -103,8 +100,49 @@ ll nCr(int n, int r) {
     return 0;
   return fact[n] / (fact[r] * fact[n - r]);
 }
+const vector<pair<int, int>> directions = {{0, 1}, {-1, 0}, {1, 0}, {0, -1}};
 
-void solve() {}
+void solve() {
+  int n, m;
+  cin >> n >> m;
+
+  vector<vector<int>> mat(n, vector<int>(m, 0));
+
+  function<bool(int, int)> valid = [&m, &n](int r, int c) -> bool {
+    return r >= 0 && c >= 0 && r < n && c < m;
+  };
+  vector<int> oppr(n * m + 1, 0);
+
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < m; j++) {
+      cin >> mat[i][j];
+      oppr[mat[i][j]] = 1;
+    }
+  }
+
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < m; j++) {
+      if (oppr[mat[i][j]] == 2)
+        continue;
+      each(dir, directions) {
+        int nr = i + dir.first, nc = j + dir.second;
+        if (valid(nr, nc) && mat[nr][nc] == mat[i][j]) {
+          oppr[mat[nr][nc]] = 2;
+        }
+      }
+    }
+  }
+
+  ll totalOppr = 0;
+  int maxF = 0;
+
+  each(v, oppr) {
+    totalOppr += v;
+    maxF = max(maxF, v);
+  }
+
+  cout << totalOppr - maxF << endl;
+}
 
 int main() {
   fastIO();

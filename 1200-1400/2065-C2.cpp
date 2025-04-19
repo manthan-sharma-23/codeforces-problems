@@ -104,7 +104,25 @@ ll nCr(int n, int r) {
   return fact[n] / (fact[r] * fact[n - r]);
 }
 
-void solve() {}
+void solve() {
+  int n, m;
+
+  cin >> n >> m;
+
+  vi a(n);
+  for (int i = 0; i < n; i++)
+    cin >> a[i];
+
+  set<int> b;
+  for (int i = 0; i < m; i++) {
+    int c;
+    cin >> c;
+    b.insert(c);
+  }
+
+  
+
+}
 
 int main() {
   fastIO();
