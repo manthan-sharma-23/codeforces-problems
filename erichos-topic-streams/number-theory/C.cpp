@@ -123,9 +123,30 @@ ll ncr(int n, int r) {
   return fact[n] / (fact[r] * fact[n - r]);
 }
 
-void solve() {}
+void print(int k, int n) {
+  if (k % n == 0)
+    cout << n << endl;
+  else
+    cout << k % n << endl;
+}
+
+void solve() {
+  int n, k;
+  cin >> n >> k;
+
+  if (n % 2 == 0) {
+    print(k, n);
+  } else {
+    if (k > n / 2)
+      print(k, n);
+    else
+      print(k, n);
+  }
+}
 
 int main() {
+
+  sieve();
   fastIO();
 
   tc solve();

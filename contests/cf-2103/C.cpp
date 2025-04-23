@@ -123,7 +123,69 @@ ll ncr(int n, int r) {
   return fact[n] / (fact[r] * fact[n - r]);
 }
 
-void solve() {}
+void solve() {
+  int n, k;
+  cin >> n >> k;
+
+  vi a(n);
+  each(it, a) cin >> it;
+
+  vi b(n + 1, 0);
+  for (int i = 1; i <= n; i++) {
+    b[i] = (a[i - 1] > k ? -1 : 1);
+  }
+
+  vi pref(n + 1, 0), suff(n + 1, 0);
+
+  for (int i = 1; i <= n; i++) {
+    pref[i] = pref[i - 1] + b[i];
+  }
+
+  suff[n] = b[n];
+  for (int i = n - 1; i >= 1; i--) {
+    suff[i] = suff[i + 1] + b[i];
+  }
+
+  each(it, pref) cout << it << " ";
+  cout << endl;
+
+  int fzp = 0, szp = 0;
+  for (int i = 1; i <= n; i++) {
+    if (pref[i] >= 0) {
+      if (fzp == 0)
+        fzp = i;
+      else if (szp == 0)
+        szp = i;
+    }
+  }
+
+  int fzs = 0, szs = 0;
+  for (int i = n; i >= 1; i--) {
+    if (suff[i] >= 0) {
+      if (fzs == 0)
+        fzs = i;
+      else if (szs == 0)
+        szs = i;
+    }
+  }
+
+  cout << fzp << " " << szp << " " << fzs << " " << szs << " " << endl;
+  if (fzp != 0 && fzs != 0 && fzp < fzs) {
+    cout << "YES" << endl;
+    return;
+  }
+
+  if (szp != 0 && szp < n) {
+    cout << "YES" << endl;
+    return;
+  }
+
+  if (szs != 0 && szs > 1) {
+    cout << "YES" << endl;
+    return;
+  }
+  cout << "NO" << endl;
+}
 
 int main() {
   fastIO();

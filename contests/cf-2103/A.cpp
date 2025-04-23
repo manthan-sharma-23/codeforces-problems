@@ -123,7 +123,20 @@ ll ncr(int n, int r) {
   return fact[n] / (fact[r] * fact[n - r]);
 }
 
-void solve() {}
+void solve() {
+  int n;
+  cin >> n;
+
+  set<int> st;
+
+  for (int i = 0; i < n; i++) {
+    int t;
+    cin >> t;
+    st.insert(t);
+  }
+
+  cout << st.size() << endl;
+}
 
 int main() {
   fastIO();

@@ -123,12 +123,67 @@ ll ncr(int n, int r) {
   return fact[n] / (fact[r] * fact[n - r]);
 }
 
-void solve() {}
+vector<pair<char, int>> transform(string s) {
+  int n = s.length();
+
+  int count = 1;
+  char last_char = s[0];
+
+  vector<pair<char, int>> result;
+
+  each(c, s) {
+    if (c == last_char) {
+      count++;
+    } else {
+      result.push_back({last_char, count});
+      count = 1, last_char = c;
+    }
+  }
+
+  if (count > 0)
+    result.push_back({last_char, count});
+
+  return result;
+}
+
+void solve() {
+  int n;
+  cin >> n;
+  string s;
+  cin >> s;
+
+  int switchs = 0;
+  int zero_to_one = 0;
+  int one_to_zero = 0;
+  char prev_char = '0';
+
+  for (int i = 0; i < n; i++) {
+    char current_char = s[i];
+    if (current_char != prev_char) {
+      switchs++;
+      if (prev_char == '0') {
+        zero_to_one++;
+      } else {
+        one_to_zero++;
+      }
+    }
+    prev_char = current_char;
+  }
+
+  int maxRev;
+  if (zero_to_one >= 2 || one_to_zero >= 2) {
+    maxRev = 2;
+  } else if (switchs >= 2) {
+    maxRev = 1;
+  } else {
+    maxRev = 0;
+  }
+
+  cout << n + switchs - maxRev << endl;
+}
 
 int main() {
   fastIO();
-
   tc solve();
-
   return 0;
 }

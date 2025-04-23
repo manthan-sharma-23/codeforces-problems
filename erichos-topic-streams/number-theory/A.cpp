@@ -123,7 +123,21 @@ ll ncr(int n, int r) {
   return fact[n] / (fact[r] * fact[n - r]);
 }
 
-void solve() {}
+void solve() {
+  int n;
+  cin >> n;
+
+  int MaxGCD = 1;
+
+  for (int i = 1; i <= n; i++) {
+
+    int largestMultiple = (n / i) * i;
+    if (largestMultiple != i)
+      MaxGCD = max(MaxGCD, i);
+  }
+
+  cout << MaxGCD << endl;
+}
 
 int main() {
   fastIO();
