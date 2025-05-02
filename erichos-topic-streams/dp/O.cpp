@@ -50,15 +50,11 @@ void solve() {
     right++;
   }
 
-  cout << maxLen
-       << endl; // Print max length of ones sequence after flipping k zeroes
-
-  // Convert the best segment by flipping required zeroes
+  cout << maxLen << endl;
   for (int i = bestL; i <= bestR; i++) {
     tr[i] = 1;
   }
 
-  // Print the modified array
   for (int num : tr) {
     cout << num << " ";
   }

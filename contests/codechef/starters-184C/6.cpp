@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 // manthan's code
-
+using namespace std;
 #define tc                                                                     \
   int t;                                                                       \
   cin >> t;                                                                    \
@@ -8,12 +8,30 @@
 #define each(x, v) for (auto &x : v)
 #define min_heap(T) priority_queue<T, vector<T>, greater<T>>
 #define max_heap(T) priority_queue<T>
-#define hash_map(T1, T2) unordered_map<T1, T2>
+#define hash_map(T1, T2) unordered_map<T1, T2, custom_hash>
 #define hash_set(T) unordered_set<T>
 
-using namespace std;
+using ll = long long;
+using ii = pair<int, int>;
+using vii = vector<ii>;
+using vll = vector<ll>;
+using vi = vector<int>;
 
-typedef long long ll;
+struct custom_hash {
+  static uint64_t splitmix64(uint64_t x) {
+    x += 0x9e3779b97f4a7c15;
+    x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
+    x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
+    return x ^ (x >> 31);
+  }
+
+  size_t operator()(uint64_t x) const {
+    static const uint64_t FIXED_RANDOM =
+        chrono::steady_clock::now().time_since_epoch().count();
+    return splitmix64(x + FIXED_RANDOM);
+  }
+};
+
 const int MOD = 1e9 + 7;
 void fastIO() {
   ios::sync_with_stdio(0);
@@ -52,7 +70,6 @@ ll mod_expo(ll base, ll exp, ll mod) {
   }
   return result;
 }
-ll mod_inv(ll a, ll mod) { return mod_expo(a, mod - 2, mod); }
 
 ll _sqrt(ll n) {
   if (n == 0 || n == 1)
@@ -73,76 +90,51 @@ ll _sqrt(ll n) {
   return ans;
 }
 
-ll nCrMod(int n, int r) {
+ll extended_gcd(ll a, ll b, ll &x, ll &y) {
+  if (b == 0) {
+    x = 1, y = 0;
+    return a;
+  }
+  ll x1, y1;
+  ll gcd = extended_gcd(b, a % b, x1, y1);
+  x = y1;
+  y = x1 - (a / b) * y1;
+  return gcd;
+}
+
+ll mod_inv(ll a, ll mod) {
+  ll x, y;
+  ll g = extended_gcd(a, mod, x, y);
+  if (g != 1)
+    return -1;
+  return (x % mod + mod) % mod;
+}
+
+ll ncr_mod(int n, int r) {
   if (r > n)
     return 0;
   return (fact[n] * mod_inv(fact[r], MOD) % MOD) * mod_inv(fact[n - r], MOD) %
          MOD;
 }
 
-ll nCr(int n, int r) {
+ll ncr(int n, int r) {
   if (r > n)
     return 0;
   return fact[n] / (fact[r] * fact[n - r]);
 }
 
 void solve() {
-  int n, k;
-  cin >> n;
+  int n;
+  vector<int> a(n), b(n);
 
-  vector<vector<int>> requests(n + 1, vector<int>(3, 0));
-  for (int i = 1; i <= n; i++) {
-    cin >> requests[i][0];
-    cin >> requests[i][1];
-    requests[i][2] = i;
-  }
-
-  sort(requests.begin() + 1, requests.end());
-
-  cin >> k;
-  vector<vector<int>> tables(k + 1, vector<int>(2, 0));
-  for (int i = 1; i <= k; i++) {
-    cin >> tables[i][0];
-    tables[i][1] = i;
-  }
-
-  sort(tables.begin() + 1, tables.end());
-
-  vector<vector<int>> dp(n + 1, vector<int>(k + 1, 0));
-
-  for (int i = 1; i <= n; i++) {
-    for (int j = 1; j <= k; j++) {
-      dp[i][j] = dp[i - 1][j];
-      if (requests[i][0] <= tables[j][0]) {
-        dp[i][j] = max(dp[i][j], dp[i - 1][j - 1] + requests[i][1]);
-      }
-    }
-  }
-
-  vector<vector<int>> res;
-  int i = n, j = k;
-
-  while (i > 0 && j > 0) {
-    if (dp[i][j] == dp[i - 1][j]) {
-      i--;
-    } else if (requests[i][0] <= tables[j][0] &&
-               dp[i][j] == dp[i - 1][j - 1] + requests[i][1]) {
-      res.push_back({requests[i][2], tables[j][1]});
-      i--;
-      j--;
-    } else {
-      i--;
-    }
-  }
-
-  cout << res.size() << " " << dp[n][k] << "\n";
-  each(pair, res) cout << pair[0] << " " << pair[1] << "\n";
+  each(it, a) cin >> it;
+  each(it, b) cin >> it;
 }
 
 int main() {
   fastIO();
 
-  solve();
+  tc solve();
 
   return 0;
 }
