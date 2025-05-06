@@ -124,7 +124,16 @@ ll ncr(int n, int r) {
   return fact[n] / (fact[r] * fact[n - r]);
 }
 
-void solve() {}
+int n;
+vi a, b, c;
+void solve() {
+  cin >> n;
+  a.assign(n, 0), b.assign(n, 0), c.assign(n, 0);
+
+  loop(i, 0, n) cin >> a[i];
+  loop(i, 0, n) cin >> b[i];
+  loop(i, 0, n) cin >> c[i];
+}
 
 int main() {
   fastIO();

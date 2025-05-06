@@ -10,7 +10,6 @@ using namespace std;
 #define max_heap(T) priority_queue<T>
 #define hash_map(T1, T2) unordered_map<T1, T2, custom_hash>
 #define hash_set(T) unordered_set<T>
-#define loop(i, a, b) for (int i = (a); i < (b); ++i)
 
 using ll = long long;
 using ii = pair<int, int>;
@@ -124,7 +123,20 @@ ll ncr(int n, int r) {
   return fact[n] / (fact[r] * fact[n - r]);
 }
 
-void solve() {}
+void solve() {
+  int n, k;
+  cin >> n >> k;
+
+  vector<int> a(n);
+  each(it, a) cin >> it;
+
+  vector<vector<int>> store(n, vector<int>(n, 0));
+
+  for (int i = 0; i < n; i++) {
+    vector<int> b;
+    
+  }
+}
 
 int main() {
   fastIO();
