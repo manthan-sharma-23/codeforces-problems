@@ -34,24 +34,10 @@ struct custom_hash {
 };
 
 const int MOD = 1e9 + 7;
-
 void fastIO() {
   ios::sync_with_stdio(0);
   cin.tie(0);
 }
-
-void usaco() {
-  freopen("hps.in", "r", stdin);
-  freopen("hps.out", "w", stdout);
-}
-
-void io(bool _usaco = false) {
-  if (_usaco)
-    usaco();
-  else
-    fastIO();
-}
-
 const int MAX_FACTORIAL = 500001;
 vector<ll> fact(MAX_FACTORIAL + 1);
 void compute_factorials() {
@@ -138,10 +124,35 @@ ll ncr(int n, int r) {
   return fact[n] / (fact[r] * fact[n - r]);
 }
 
-void solve() {}
+void solve() {
+  int n;
+  cin >> n;
+
+  vi a(n);
+  each(it, a) cin >> it;
+
+  if (n == 1) {
+    cout << a[0] << endl;
+    return;
+  }
+
+  vector<vll> dp(n, vll(2, 0LL));
+
+  dp[0][0] = INT_MAX;
+  dp[0][1] = a[0];
+  dp[1][0] = dp[0][1];
+  dp[1][1] = a[1] + dp[0][1];
+
+  for (int i = 2; i < n; i++) {
+    dp[i][0] = min(dp[i - 1][1], dp[i - 2][1]);
+    dp[i][1] = min(a[i] + dp[i - 1][0], a[i] + a[i - 1] + dp[i - 2][0]);
+  }
+
+  cout << min(dp[n - 1][0], dp[n - 1][1]) << endl;
+}
 
 int main() {
-  io(false);
+  fastIO();
 
   tc solve();
 

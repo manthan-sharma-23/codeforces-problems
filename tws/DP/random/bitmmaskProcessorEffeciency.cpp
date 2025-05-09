@@ -6,11 +6,11 @@ using namespace std;
   cin >> t;                                                                    \
   while (t--)
 #define each(x, v) for (auto &x : v)
+#define loop(i, a, b, step) for (int i = (a); i < (b); i += step)
 #define min_heap(T) priority_queue<T, vector<T>, greater<T>>
 #define max_heap(T) priority_queue<T>
 #define hash_map(T1, T2) unordered_map<T1, T2, custom_hash>
 #define hash_set(T) unordered_set<T>
-#define loop(i, a, b) for (int i = (a); i < (b); ++i)
 
 using ll = long long;
 using ii = pair<int, int>;
@@ -124,15 +124,46 @@ ll ncr(int n, int r) {
   return fact[n] / (fact[r] * fact[n - r]);
 }
 
-int n;
-vi a, b, c;
 void solve() {
+  int n;
   cin >> n;
-  a.assign(n, 0), b.assign(n, 0), c.assign(n, 0);
+  vi a(n, 0), b(n, 0), c(n, 0);
 
-  loop(i, 0, n) cin >> a[i];
-  loop(i, 0, n) cin >> b[i];
-  loop(i, 0, n) cin >> c[i];
+  loop(i, 0, n, 1) cin >> a[i];
+  loop(i, 0, n, 1) cin >> b[i];
+  loop(i, 0, n, 1) cin >> c[i];
+
+  int completeMask = (1 << n);
+
+  vll dp(completeMask, 0);
+
+  loop(mask, 0, completeMask, 1) {
+    loop(i, 0, n, 1) {
+      if (mask & (1 << i))
+        continue;
+
+      int prevM = mask;
+      int adjC = 0;
+
+      if (i > 0 && prevM & (1 << (i - 1)))
+        adjC++;
+      if (i < n - 1 && prevM & (1 << (i + 1)))
+        adjC++;
+
+      ll effeciency = 0LL;
+      if (adjC == 0)
+        effeciency = a[i];
+      else if (adjC == 1)
+        effeciency = b[i];
+      else
+        effeciency = c[i];
+
+      int newMask = mask | (1 << i);
+      dp[newMask] = max(dp[newMask], effeciency + dp[mask]);
+    }
+  }
+
+  cout << dp[completeMask - 1] << endl;
 }
 
 int main() {

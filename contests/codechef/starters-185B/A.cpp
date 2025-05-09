@@ -34,24 +34,10 @@ struct custom_hash {
 };
 
 const int MOD = 1e9 + 7;
-
 void fastIO() {
   ios::sync_with_stdio(0);
   cin.tie(0);
 }
-
-void usaco() {
-  freopen("hps.in", "r", stdin);
-  freopen("hps.out", "w", stdout);
-}
-
-void io(bool _usaco = false) {
-  if (_usaco)
-    usaco();
-  else
-    fastIO();
-}
-
 const int MAX_FACTORIAL = 500001;
 vector<ll> fact(MAX_FACTORIAL + 1);
 void compute_factorials() {
@@ -138,10 +124,71 @@ ll ncr(int n, int r) {
   return fact[n] / (fact[r] * fact[n - r]);
 }
 
-void solve() {}
+ll next_coprime(ll x) {
+  ll candidate = x + 1;
+  while (__gcd(candidate, x) != 1) {
+    ++candidate;
+  }
+  return candidate;
+}
+
+void solve() {
+  ll n, H;
+  cin >> n >> H;
+
+  ll max1 = -1, max2 = -1;
+
+  for (int i = 0; i < n; i++) {
+    ll z, s;
+
+    cin >> z >> s;
+
+    if (z == 1) {
+      max1 = max(max1, s);
+    } else {
+      max2 = max(max2, s);
+    }
+  }
+
+  if (max1 == -1) {
+    cout << (ll)ceil((double)H / max2) * 2 << endl;
+    return;
+  } else if (max2 == -1) {
+    cout << (ll)ceil((double)H / max1) * 1 << endl;
+    return;
+  }
+
+  if (max1 >= H) {
+    cout << 1 << endl;
+    return;
+  } else if (max2 >= H) {
+    cout << 2 << endl;
+    return;
+  } else if (max1 >= max2) {
+    cout << (ll)ceil((double)H / max1) << endl;
+    return;
+  } else {
+    if (max1 * 2 >= max2) {
+      cout << (ll)ceil((double)H / max1) << endl;
+    } else {
+      ll left = H % max2;
+      ll t = (ll)floor((double)H / max2) * 2;
+
+      if (left == 0) {
+        cout << t << endl;
+        return;
+      }
+
+      if (max1 >= left) {
+        cout << t + 1 << endl;
+      } else
+        cout << t + 2 << endl;
+    }
+  }
+}
 
 int main() {
-  io(false);
+  fastIO();
 
   tc solve();
 
