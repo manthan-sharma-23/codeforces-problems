@@ -11,6 +11,8 @@ using namespace std;
 #define hash_map(T1, T2) unordered_map<T1, T2, custom_hash>
 #define hash_set(T) unordered_set<T>
 #define loop(i, a, b, step) for (int i = (a); i < (b); i += step)
+#define asc(v) sort((v).begin(), (v).end())
+#define dsc(v) sort((v).rbegin(), (v).rend())
 
 using ll = long long;
 using ii = pair<int, int>;
@@ -40,16 +42,10 @@ void fastIO() {
   cin.tie(0);
 }
 
-void usaco() {
-  freopen("hps.in", "r", stdin);
-  freopen("hps.out", "w", stdout);
-}
+void usaco(string name = "h") {
 
-void io(bool _usaco = false) {
-  if (_usaco)
-    usaco();
-  else
-    fastIO();
+  freopen((name + ".in").c_str(), "r", stdin);
+  freopen((name + ".out").c_str(), "w", stdout);
 }
 
 const int MAX_FACTORIAL = 500001;
@@ -141,8 +137,8 @@ ll ncr(int n, int r) {
 void solve() {}
 
 int main() {
-  io(false);
-
+  // usaco();
+  fastIO();
   tc solve();
 
   return 0;
