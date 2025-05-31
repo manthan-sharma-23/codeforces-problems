@@ -13,7 +13,6 @@ using namespace std;
 #define loop(i, a, b, step) for (int i = (a); i < (b); i += step)
 #define asc(v) sort((v).begin(), (v).end())
 #define dsc(v) sort((v).rbegin(), (v).rend())
-#define MOD 1000000007
 
 using ll = long long;
 using ii = pair<int, int>;
@@ -35,6 +34,8 @@ struct custom_hash {
     return splitmix64(x + FIXED_RANDOM);
   }
 };
+
+const int MOD = 1e9 + 7;
 
 void fastIO() {
   ios::sync_with_stdio(0);
@@ -133,7 +134,11 @@ ll ncr(int n, int r) {
   return fact[n] / (fact[r] * fact[n - r]);
 }
 
-void solve() {}
+void solve() {
+    int n;
+    cin >>n;
+    
+}
 
 int main() {
   // usaco();

@@ -13,7 +13,6 @@ using namespace std;
 #define loop(i, a, b, step) for (int i = (a); i < (b); i += step)
 #define asc(v) sort((v).begin(), (v).end())
 #define dsc(v) sort((v).rbegin(), (v).rend())
-#define MOD 1000000007
 
 using ll = long long;
 using ii = pair<int, int>;
@@ -35,6 +34,8 @@ struct custom_hash {
     return splitmix64(x + FIXED_RANDOM);
   }
 };
+
+const int MOD = 1e9 + 7;
 
 void fastIO() {
   ios::sync_with_stdio(0);
@@ -133,12 +134,79 @@ ll ncr(int n, int r) {
   return fact[n] / (fact[r] * fact[n - r]);
 }
 
-void solve() {}
+struct DSU {
+  vi parent, rank;
+  DSU(int n) : parent(n), rank(n, 0) { iota(parent.begin(), parent.end(), 0); }
+
+  int find(int x) { return parent[x] == x ? x : parent[x] = find(parent[x]); }
+
+  bool unite(int a, int b) {
+    a = find(a);
+    b = find(b);
+    if (a == b)
+      return false;
+    if (rank[a] < rank[b])
+      swap(a, b);
+    parent[b] = a;
+    if (rank[a] == rank[b])
+      rank[a]++;
+    return true;
+  }
+};
+
+void solve() {
+  int n;
+  cin >> n;
+
+  vii bulbs(n);
+
+  vector<array<ll, 3>> edges;
+
+  each(b, bulbs) {
+    cin >> b.first;
+    cin >> b.second;
+  }
+
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n; j++) {
+      if (i == j)
+        continue;
+
+      ll dx = bulbs[i].first - bulbs[j].first;
+      ll dy = bulbs[i].second - bulbs[j].second;
+      ll dist2 = dx * dx + dy * dy;
+
+      edges.push_back({
+          dist2,
+          i,
+          j,
+      });
+    }
+  }
+
+  asc(edges);
+
+  DSU dsu(n);
+
+  ll mst_wt = 0;
+  int edges_used = 0;
+
+  for (auto &[wt, u, v] : edges) {
+    if (dsu.unite(u, v)) {
+      mst_wt += wt;
+      edges_used++;
+      if (edges_used == n - 1)
+        break;
+    }
+  }
+
+  cout << mst_wt << endl;
+}
 
 int main() {
   // usaco();
   fastIO();
-  tc solve();
+  solve();
 
   return 0;
 }
