@@ -1,14 +1,15 @@
 #include <bits/stdc++.h>
+#include <numeric>
 // manthan's code
 using namespace std;
 #define tc                                                                     \
   int t;                                                                       \
   cin >> t;                                                                    \
   while (t--)
+#define each(x, v) for (auto &x : v)
 #define FIO                                                                    \
   ios::sync_with_stdio(0);                                                     \
   cin.tie(0);
-#define each(x, v) for (auto &x : v)
 #define min_heap(T) priority_queue<T, vector<T>, greater<T>>
 #define max_heap(T) priority_queue<T>
 #define hash_map(T1, T2) unordered_map<T1, T2, custom_hash>
@@ -45,93 +46,100 @@ void usaco(string name = "h") {
   freopen((name + ".out").c_str(), "w", stdout);
 }
 
-const int MAX_FACTORIAL = 500001;
-vector<ll> fact(MAX_FACTORIAL + 1);
-void compute_factorials() {
-  fact[0] = 1;
-  for (int i = 1; i <= MAX_FACTORIAL; i++) {
-    fact[i] = (fact[i - 1] * i) % MOD;
-  }
-}
+struct DSU {
+  vi teams, parent;
+  vll strength, size;
 
-const int MAX_SIEVE = 1e6;
-vector<bool> isPrime(MAX_SIEVE + 1, 1);
-void sieve() {
-  isPrime[0] = isPrime[1] = 0;
-  for (int i = 2; i * i <= MAX_SIEVE; i++) {
-    if (isPrime[i]) {
-      for (int j = i * i; j <= MAX_SIEVE; j += i) {
-        isPrime[j] = 0;
-      }
+  DSU(int n) {
+    strength.resize(n);
+    parent.resize(n);
+    teams.resize(n);
+
+    size.assign(n, 1LL);
+
+    iota(parent.begin(), parent.end(), 0);
+    iota(teams.begin(), teams.end(), 0);
+    iota(strength.begin(), strength.end(), 1LL);
+  }
+
+  int find(int x) {
+    if (parent[x] == x)
+      return x;
+    else
+      return parent[x] = find(parent[x]);
+  }
+
+  void unite(int x, int y) {
+    int tx = teams[x], ty = teams[y];
+
+    int rtx = find(tx), rty = find(ty);
+
+    if (rtx == rty)
+      return;
+
+    if (size[rtx] < size[rty]) {
+      swap(rtx, rty);
+      swap(x, y);
     }
+
+    parent[y] = rtx;
+    strength[rtx] += strength[rty];
+    size[rtx] += size[rty];
   }
-}
 
-ll mod_expo(ll base, ll exp, ll mod) {
-  ll result = 1;
-  while (exp > 0) {
-    if (exp % 2 == 1) {
-      result = (result * base) % mod;
-    }
-    base = (base * base) % mod;
-    exp /= 2;
+  void strength_size(int x) {
+    cout << size[find(teams[x])] << " " << strength[find(teams[x])] << endl;
   }
-  return result;
-}
 
-ll _sqrt(ll n) {
-  if (n == 0 || n == 1)
-    return n;
+  void remove(int x, int y) {
+    int tx = teams[x], ty = teams[y];
 
-  ll low = 1, high = n, ans = 0;
-  while (low <= high) {
-    ll mid = low + (high - low) / 2;
-    if (mid * mid == n)
-      return mid;
-    else if (mid * mid < n) {
-      ans = mid;
-      low = mid + 1;
+    int rtx = find(tx), rty = find(ty);
+
+    if (rtx == rty)
+      return;
+
+    strength[rtx] -= x + 1;
+    size[rtx]--;
+
+    strength[rty] += x + 1;
+    size[rty]++;
+    teams[x] = rty;
+  }
+};
+
+void solve() {
+  int n, q;
+  cin >> n >> q;
+
+  DSU dsu(n);
+
+  while (q--) {
+    int T;
+    cin >> T;
+
+    if (T == 1) {
+      int x, y;
+      cin >> x >> y;
+      x--, y--;
+
+      dsu.unite(x, y);
+    } else if (T == 2) {
+      int x;
+      cin >> x;
+      x--;
+
+      dsu.strength_size(x);
+
     } else {
-      high = mid - 1;
+      int x, y;
+      cin >> x >> y;
+      x--, y--;
+
+      dsu.remove(x, y);
     }
   }
-  return ans;
 }
-
-ll extended_gcd(ll a, ll b, ll &x, ll &y) {
-  if (b == 0) {
-    x = 1, y = 0;
-    return a;
-  }
-  ll x1, y1;
-  ll gcd = extended_gcd(b, a % b, x1, y1);
-  x = y1;
-  y = x1 - (a / b) * y1;
-  return gcd;
-}
-
-ll mod_inv(ll a, ll mod) {
-  ll x, y;
-  ll g = extended_gcd(a, mod, x, y);
-  if (g != 1)
-    return -1;
-  return (x % mod + mod) % mod;
-}
-
-ll ncr_mod(int n, int r) {
-  if (r > n)
-    return 0;
-  return (fact[n] * mod_inv(fact[r], MOD) % MOD) * mod_inv(fact[n - r], MOD) %
-         MOD;
-}
-
-ll ncr(int n, int r) {
-  if (r > n)
-    return 0;
-  return fact[n] / (fact[r] * fact[n - r]);
-}
-
-void solve() {}
 
 int main() {
   // usaco();

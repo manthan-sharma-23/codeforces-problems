@@ -5,9 +5,6 @@ using namespace std;
   int t;                                                                       \
   cin >> t;                                                                    \
   while (t--)
-#define FIO                                                                    \
-  ios::sync_with_stdio(0);                                                     \
-  cin.tie(0);
 #define each(x, v) for (auto &x : v)
 #define min_heap(T) priority_queue<T, vector<T>, greater<T>>
 #define max_heap(T) priority_queue<T>
@@ -38,6 +35,11 @@ struct custom_hash {
     return splitmix64(x + FIXED_RANDOM);
   }
 };
+
+void fastIO() {
+  ios::sync_with_stdio(0);
+  cin.tie(0);
+}
 
 void usaco(string name = "h") {
 
@@ -131,11 +133,17 @@ ll ncr(int n, int r) {
   return fact[n] / (fact[r] * fact[n - r]);
 }
 
-void solve() {}
+void solve() {
+  int n, r, c;
+  cin >> n >> r >> c;
+
+  
+}
 
 int main() {
   // usaco();
-  FIO tc solve();
+  fastIO();
+  tc solve();
 
   return 0;
 }
