@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#include <cstring>
 // manthan's code
 using namespace std;
 #define tc                                                                     \
@@ -18,11 +17,12 @@ using namespace std;
 #define asc(v) sort((v).begin(), (v).end())
 #define dsc(v) sort((v).rbegin(), (v).rend())
 #define MOD 1000000007
-#define ll long long
-#define ii pair<int, int>
-#define vii vector<ii>
-#define vll vector<ll>
-#define vi vector<int>
+
+using ll = long long;
+using ii = pair<int, int>;
+using vii = vector<ii>;
+using vll = vector<ll>;
+using vi = vector<int>;
 
 void usaco(string name = "h") {
 
@@ -116,7 +116,20 @@ ll ncr(int n, int r) {
   return fact[n] / (fact[r] * fact[n - r]);
 }
 
-void solve() {}
+void solve() {
+  int n, k;
+  cin >> n >> k;
+
+  int i = 0;
+  for (int i = 0; i < n; i++) {
+    if (i < k)
+      cout << 1;
+    else
+      cout << 0;
+  }
+
+  cout << '\n';
+}
 
 int main() {
   // usaco();
