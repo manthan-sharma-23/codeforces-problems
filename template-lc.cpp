@@ -15,3 +15,5 @@ using namespace std;
 #define ll long long
 #define vi vector<int>
 #define vll vector<ll>
+#define vvi vector<vi>
+#define vvll vector<vll>

@@ -23,6 +23,8 @@ using namespace std;
 #define vii vector<ii>
 #define vll vector<ll>
 #define vi vector<int>
+#define vvi vector<vi>
+#define vvll vector<vll>
 
 void usaco(string name = "h") {
 
